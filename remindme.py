@@ -10,6 +10,7 @@ from pymsgbox import *
 
 triggered= False
 
+
 reminder = sys.argv[2]
 
 #######################
@@ -102,13 +103,6 @@ try:
 	sys.argv[3]
 except:
 	# No email/XMPP
-	return c
-
-# Main stuff is here
-try:
-	sys.argv[3]
-except:
-	# No email/XMPP
 	procedure(getSeconds(sys.argv[1]))
 	playTone()
 	alert(text=reminder,title='Reminder!',button='OK')
@@ -116,11 +110,8 @@ else:
 	#Email or XMPP
 	if not triggered:
 		print('''[!] Please note: 
-		Email was kind of a challenge for me to program, so 
-		there's a very good chance that I messed something up.
-		Please please please test the configuration for errors 
-		before using it! I don't want you to not get something 
-		important because of this...
+		This program is still being updated. Please set up some
+		form of contingency until the program is fully released.
 
 		This message will only appear once.
 		''')
