@@ -5,23 +5,12 @@
 import os
 import sys
 import time
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import datetime as dt
 from pymsgbox import *
 
-# Load configurations
-server_smtp= 'smtp.gmail.com'
-server_port= 587
-email= ""
-email_pass= ""
 triggered= False
 
-
 reminder = sys.argv[2]
-
-smtpserver = smtplib.SMTP(server_smtp,server_port)
 
 #######################
 
@@ -102,31 +91,6 @@ def procedure(protime):
 		alert(text="Erm... The time needs to be in the future... Spitting out your reminder now:\n\n" + sys.argv[2], title='Reminder!', button='OK, sorry!')
 		sys.exit(1)
 
-def signin():
-	# You may need to go to accounts.google.com/DisplayUnlockCaptcha the first time
-	smtpserver.starttls()
-	smtpserver.ehlo()
-	try:
-		smtpserver.login(email,email_pass)
-	except:
-		playTone()
-		print("[!] Something went wrong - did you set up email correctly?")
-def signal(type, to):
-	if type.upper() == "EMAIL":
-		signin()
-		msg = MIMEMultipart()
-		msg['From'] = gmail
-		msg['To'] = to
-		msg['Subject'] = "Remindme: "+reminder[:10]+"..."
-		msg.attach(MIMEText(reminder))
-		msg.attach(MIMEText("\n\nSent (with love) from RemindMe"))
-		try:
-			smtpserver.sendmail(email,to,msg.as_string())
-		except ValueError:
-			alert(text="[!!] FATAL ERROR: COULDN'T SEND EMAIL",title="ERROR",button="OK")
-		smtpserver.close()
-	else:
-		pass # planned feature?
 def playTone():
 	"Middle C is 523 Hz"
 	os.system('play --no-show-progress --null --channels 1 synth .1 sine 523')
@@ -139,45 +103,6 @@ try:
 except:
 	# No email/XMPP
 	return c
-# Wait it out
-def procedure(protime):
-	if protime > 0:
-		time.sleep(protime)
-	else:
-		playTone()
-		alert(text="Erm... The time needs to be in the future... Spitting out your reminder now:\n\n" + sys.argv[2], title='Reminder!', button='OK, sorry!')
-		sys.exit(1)
-
-def signin():
-	# You may need to go to accounts.google.com/DisplayUnlockCaptcha the first time
-	smtpserver.starttls()
-	smtpserver.ehlo()
-	try:
-		smtpserver.login(email,email_pass)
-	except:
-		playTone()
-		print("[!] Something went wrong - did you set up email correctly?")
-def signal(type, to):
-	if type.upper() == "EMAIL":
-		signin()
-		msg = MIMEMultipart()
-		msg['From'] = gmail
-		msg['To'] = to
-		msg['Subject'] = "Remindme: "+reminder[:10]+"..."
-		msg.attach(MIMEText(reminder))
-		msg.attach(MIMEText("\n\nSent (with love) from RemindMe"))
-		try:
-			smtpserver.sendmail(email,to,msg.as_string())
-		except ValueError:
-			alert(text="[!!] FATAL ERROR: COULDN'T SEND EMAIL",title="ERROR",button="OK")
-		smtpserver.close()
-	else:
-		pass # planned feature?
-def playTone():
-	"Middle C is 523 Hz"
-	os.system('play --no-show-progress --null --channels 1 synth .1 sine 523')
-	os.system('play --no-show-progress --null --channels 1 synth .1 sine 423')
-	# play(.1,523)
 
 # Main stuff is here
 try:
